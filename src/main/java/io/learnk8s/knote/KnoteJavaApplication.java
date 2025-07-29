@@ -50,12 +50,15 @@ interface NotesRepository extends MongoRepository<Note, String> {
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+// @AllArgsConstructor
 class Note {
     @Id
     private String id;
     private String description;
-
+    public Note(String id, String description) {
+        this.id = id;
+        this.description = description;
+    }
     @Override
     public String toString() {
         return description;
