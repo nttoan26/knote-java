@@ -24,7 +24,5 @@ updates:
       interval: "daily"
   - package-ecosystem: "docker"
     directory: "/kube"
-    labels:
-      - "k8s"
     schedule:
       interval: "daily"
