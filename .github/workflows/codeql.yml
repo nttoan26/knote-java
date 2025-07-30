@@ -38,7 +38,6 @@ jobs:
         queries: security-extended,security-and-quality
         # config-file: ./.github/codeql/codeql-config.yml
 
-
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
