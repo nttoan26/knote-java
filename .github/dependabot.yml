@@ -1,6 +1,30 @@
 version: 2
 updates:
-  - package-ecosystem: "maven" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "maven"
+    target-branch: "develop"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+    - dependency-name: "*"
+      dependency-type: "all"
+    assignees:
+      - nttoan26
+    commit-message:
+      prefix: "Dependapot"
+    cooldown:
+      include:
+        - "*"
+      semver-major-days: 60
+      semver-minor-days: 30
+      semver-patch-days: 10
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/kube"
+    labels:
+      - "k8s"
     schedule:
       interval: "daily"
