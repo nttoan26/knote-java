@@ -38,6 +38,11 @@ public class KnoteJavaApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(KnoteJavaApplication.class, args);
+        String test = "test";
+        if ("test" == test) {
+            System.out.println("Test");
+        }
+        
     }
 
 }
