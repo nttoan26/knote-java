@@ -51,9 +51,9 @@ jobs:
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: "ad708e8a-b852-40c8-be1a-6a78275419b1"
+          tenant-id: "ad6a0622-ece3-444b-94af-c217150b17a6"
+          subscription-id: "d70f8bfa-a0f0-4b45-9efe-12603d21ddc5"
       - name: Get Tag Name
         run: echo Tag name ${{ inputs.tag }}
       - name: Build and push image to ACR
