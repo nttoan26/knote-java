@@ -60,18 +60,21 @@ jobs:
       #   if: ${{ inputs.environment != 'dev' }}
       #   run: echo "image_tag=${{ env.project_version }}" >> $GITHUB_ENV
 
-      - name: Release snapshot
+      - name: Create Release
         if: ${{ inputs.environment == 'dev' }}
         id: release-snapshot
-        uses: actions/create-release@latest
+        uses: ncipollo/release-action@v1.18.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.image_tag }}
-          release_name: "Pre-release for ${{ env.project_version }}"
-          draft: false
+          allowUpdates: true
+          updateOnlyUnreleased: true
+          artifacts: "./target/*.jar"
+          tag: ${{ env.image_tag }}
+          draft: true
           prerelease: true
-          body: "This is a example release note, could programatically include all the issue # resolved by this release"
+          generateReleaseNotes: true
+          body: "Below release note are auto-generated base on commit"
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
