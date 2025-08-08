@@ -106,8 +106,9 @@ class KNoteController {
     private HtmlRenderer renderer = HtmlRenderer.builder().build();
 
 
-    @GetMapping("/")
+    @GetMapping("/notes")
     public String index(Model model) {
+        System.out.println("Get all notes");
         getAllNotes(model);
         return "index";
     }
