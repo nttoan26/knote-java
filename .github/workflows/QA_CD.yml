@@ -17,4 +17,3 @@ jobs:
       stack: java
       platform: k8s
       container_name: knote
-      tag: ${{ github.ref_name }}

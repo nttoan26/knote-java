@@ -12,9 +12,6 @@ on:
       container_name:
         required: true
         type: string
-      tag:
-        required: true
-        type: string
       stack:
         required: true
         type: string
@@ -51,20 +48,39 @@ jobs:
       - name: Extract version from pom.xml
         id: extract_version
         run: echo "project_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-      - name: Use the extracted version
-        run: echo version ${{ env.project_version }}
+      
+      - name: Set image tag
+        run: |
+          if [[ ${{ inputs.environment }} == 'dev' ]];
+            echo "image_tag=${{ env.project_version }}-pre-release" >> $GITHUB_ENV
+          else
+            echo "image_tag=${{ env.project_version }}" >> $GITHUB_ENV
+          fi
+      # - name: Set image tag 
+      #   if: ${{ inputs.environment != 'dev' }}
+      #   run: echo "image_tag=${{ env.project_version }}" >> $GITHUB_ENV
 
+      - name: Release snapshot
+        if: ${{ inputs.environment == 'dev' }}
+        id: release-snapshot
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.image_tag }}
+          release_name: "Pre-release for ${{ env.project_version }}"
+          draft: false
+          prerelease: true
+          body: "This is a example release note, could programatically include all the issue # resolved by this release"
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: Get Tag Name
-        run: echo Tag name ${{ inputs.tag }}
       - name: Build and push image to ACR
         run: |
-          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ inputs.container_name }}:${{ env.project_version }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
+          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ inputs.container_name }}:${{ env.image_tag }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
 
   deploy:
     environment: ${{ inputs.environment}}
@@ -103,9 +119,16 @@ jobs:
           action: deploy
           manifests: ./kube/mongo.yaml
 
+      - name: Extract version from pom.xml
+        id: extract_version
+        run: echo "project_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+        
+      - name: Version
+        run: echo Version ${{ env.project_version }}
+
       - name: "Deploys ${{ inputs.container_name }}"
         uses: Azure/k8s-deploy@v4
         with:
           action: deploy
           manifests: ./kube/knote.yaml
-          images: sagaftradevopspoc.azurecr.io/${{ inputs.container_name }}:${{ inputs.tag }}
+          images: sagaftradevopspoc.azurecr.io/${{ inputs.container_name }}:${{ env.project_version }}
