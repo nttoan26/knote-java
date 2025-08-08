@@ -3,6 +3,8 @@ name: CD
 on:
   push:
     branches: ["master"]
+    tags:
+      - '*'
   workflow_dispatch:
 
 env:
@@ -36,10 +38,11 @@ jobs:
           client-id: "ad708e8a-b852-40c8-be1a-6a78275419b1"
           tenant-id: "ad6a0622-ece3-444b-94af-c217150b17a6"
           subscription-id: "d70f8bfa-a0f0-4b45-9efe-12603d21ddc5"
-
+      - name: Get Tag Name
+        run: echo Tag name ${{ github.ref_name }}
       - name: Build and push image to ACR
         run: |
-          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
+          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.ref_name }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
 
   deploy:
     permissions:
@@ -82,3 +85,4 @@ jobs:
         with:
           action: deploy
           manifests: ./kube/knote.yaml
+          images: sagaftradevopspoc.azurecr.io/knote:${{ github.ref_name }}
