@@ -70,7 +70,8 @@ jobs:
           updateOnlyUnreleased: true
           artifacts: "./target/*.jar"
           tag: ${{ env.image_tag }}
-          draft: true
+          commit: ${{ github.ref_name }}
+          draft: ${{ inputs.environment == 'dev' }}
           prerelease: true
           generateReleaseNotes: true
           body: "Below release note are auto-generated base on commit"
