@@ -68,11 +68,12 @@ jobs:
         with:
           allowUpdates: true
           updateOnlyUnreleased: true
+          omitBodyDuringUpdate: true
           artifacts: "./target/*.jar"
           tag: ${{ env.image_tag }}
           commit: ${{ github.ref_name }}
           draft: ${{ inputs.environment == 'dev' }}
-          prerelease: true
+          prerelease: ${{ inputs.environment == 'dev' }}
           generateReleaseNotes: true
           body: "Below release note are auto-generated base on commit"
       - name: Update Release
