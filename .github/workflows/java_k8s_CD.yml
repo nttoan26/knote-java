@@ -29,7 +29,7 @@ env:
 jobs:
   buildImage:
     permissions:
-      contents: read
+      contents: write
       id-token: write
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment}}
@@ -52,9 +52,9 @@ jobs:
       - name: Set image tag
         run: |
           if [[ ${{ inputs.environment }} == 'dev' ]]; then
-            echo "image_tag=${{ env.project_version }}-pre-release" >> $GITHUB_ENV
+            echo "image_tag=v${{ env.project_version }}-pre-release" >> $GITHUB_ENV
           else
-            echo "image_tag=${{ env.project_version }}" >> $GITHUB_ENV
+            echo "image_tag=v${{ env.project_version }}" >> $GITHUB_ENV
           fi
       # - name: Set image tag 
       #   if: ${{ inputs.environment != 'dev' }}
