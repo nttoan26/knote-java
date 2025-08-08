@@ -51,7 +51,7 @@ jobs:
       
       - name: Set image tag
         run: |
-          if [[ ${{ inputs.environment }} == 'dev' ]];
+          if [[ ${{ inputs.environment }} == 'dev' ]]; then
             echo "image_tag=${{ env.project_version }}-pre-release" >> $GITHUB_ENV
           else
             echo "image_tag=${{ env.project_version }}" >> $GITHUB_ENV
