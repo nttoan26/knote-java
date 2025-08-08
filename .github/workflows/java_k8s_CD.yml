@@ -52,16 +52,12 @@ jobs:
       - name: Set image tag
         run: |
           if [[ ${{ inputs.environment }} == 'dev' ]]; then
-            echo "image_tag=v${{ env.project_version }}-pre-release" >> $GITHUB_ENV
+            echo "image_tag=v${{ env.project_version }}-rc" >> $GITHUB_ENV
           else
-            echo "image_tag=v${{ env.project_version }}" >> $GITHUB_ENV
+            echo "image_tag=v${{ env.project_version }}-rc" >> $GITHUB_ENV
           fi
-      # - name: Set image tag 
-      #   if: ${{ inputs.environment != 'dev' }}
-      #   run: echo "image_tag=${{ env.project_version }}" >> $GITHUB_ENV
 
       - name: Create Release
-        if: ${{ inputs.environment == 'dev' }}
         uses: ncipollo/release-action@v1.18.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -72,23 +68,23 @@ jobs:
           artifacts: "./target/*.jar"
           tag: ${{ env.image_tag }}
           commit: ${{ github.ref_name }}
-          draft: ${{ inputs.environment == 'dev' }}
+          draft: false
           prerelease: ${{ inputs.environment == 'dev' }}
           generateReleaseNotes: true
           body: "Below release note are auto-generated base on commit"
-      - name: Update Release
-        if: ${{ inputs.environment == 'qa' }}
-        uses: ncipollo/release-action@v1.18.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          allowUpdates: true
-          updateOnlyUnreleased: true
-          omitBodyDuringUpdate: true
-          artifacts: "./target/*.jar"
-          tag: ${{ env.image_tag }}
-          draft: ${{ inputs.environment == 'dev' }}
-          prerelease: false
+      # - name: Update Release
+      #   if: ${{ inputs.environment == 'qa' }}
+      #   uses: ncipollo/release-action@v1.18.0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     allowUpdates: true
+      #     updateOnlyUnreleased: true
+      #     omitBodyDuringUpdate: true
+      #     artifacts: "./target/*.jar"
+      #     tag: ${{ env.image_tag }}
+      #     draft: ${{ inputs.environment == 'dev' }}
+      #     prerelease: false
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
