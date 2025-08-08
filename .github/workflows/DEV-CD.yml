@@ -1,0 +1,19 @@
+name: CD - Deploy DEV
+
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+
+jobs:
+  deploy:
+    name: Deploy to DEV env
+    uses: ./.github/workflows/java_k8s_CD.yml
+    with:
+      environment: dev
+      namespace: default
+      stack: java
+      platform: k8s
+      container_name: knote
+      tag: ${{ github.ref_name }}

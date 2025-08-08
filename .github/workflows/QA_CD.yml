@@ -1,0 +1,20 @@
+name: CD - Deploy QA
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+
+jobs:
+  deploy:
+    name: Deploy to QA env
+    uses: ./.github/workflows/java_k8s_CD.yml
+    with:
+      environment: qa
+      namespace: default
+      stack: java
+      platform: k8s
+      container_name: knote
+      tag: ${{ github.ref_name }}
