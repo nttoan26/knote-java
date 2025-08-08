@@ -73,19 +73,7 @@ jobs:
           prerelease: ${{ inputs.environment == 'dev' }}
           generateReleaseNotes: true
           body: "Below release note are auto-generated base on commit"
-      # - name: Update Release
-      #   if: ${{ inputs.environment == 'qa' }}
-      #   uses: ncipollo/release-action@v1.18.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     allowUpdates: true
-      #     updateOnlyUnreleased: true
-      #     omitBodyDuringUpdate: true
-      #     artifacts: "./target/*.jar"
-      #     tag: ${{ env.image_tag }}
-      #     draft: ${{ inputs.environment == 'dev' }}
-      #     prerelease: false
+
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
@@ -127,12 +115,6 @@ jobs:
           admin: 'false'
           use-kubelogin: 'true'
 
-      - name: Deploys mongo
-        uses: Azure/k8s-deploy@v4
-        with:
-          action: deploy
-          manifests: ./kube/mongo.yaml
-
       - name: Extract version from pom.xml
         id: extract_version
         run: echo "project_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
@@ -145,4 +127,4 @@ jobs:
         with:
           action: deploy
           manifests: ./kube/knote.yaml
-          images: sagaftradevopspoc.azurecr.io/${{ inputs.container_name }}:${{ env.project_version }}
+          images: sagaftradevopspoc.azurecr.io/${{ inputs.container_name }}:${{ env.image_tag }}
