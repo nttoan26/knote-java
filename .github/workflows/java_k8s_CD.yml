@@ -64,7 +64,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           allowUpdates: true
-          updateOnlyUnreleased: true
+          updateOnlyUnreleased: false
           omitBodyDuringUpdate: true
           artifacts: "./target/*.jar"
           tag: ${{ env.image_tag }}
