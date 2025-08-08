@@ -119,6 +119,13 @@ jobs:
         id: extract_version
         run: echo "project_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
         
+      - name: Set image tag
+        run: |
+          if [[ ${{ inputs.environment }} == 'dev' ]]; then
+            echo "image_tag=v${{ env.project_version }}-rc" >> $GITHUB_ENV
+          else
+            echo "image_tag=v${{ env.project_version }}-rc" >> $GITHUB_ENV
+          fi
       - name: Version
         run: echo Version ${{ env.project_version }}
 
