@@ -48,6 +48,13 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
+      - name: Get POM Version
+        id: pom-version # Assign an ID to this step
+        uses: marketplace/actions/get-current-pom-version-of-project@v1 # Use the appropriate version
+
+      - name: Use Version
+        run: echo version ${{ steps.pom-version.outputs.version }}
+
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
@@ -58,7 +65,7 @@ jobs:
         run: echo Tag name ${{ inputs.tag }}
       - name: Build and push image to ACR
         run: |
-          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ inputs.container_name }}:${{ inputs.tag }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
+          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ inputs.container_name }}:${{ steps.pom-version.outputs.version }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
 
   deploy:
     environment: ${{ inputs.environment}}
