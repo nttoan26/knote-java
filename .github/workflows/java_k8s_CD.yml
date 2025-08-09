@@ -32,6 +32,7 @@ jobs:
       contents: write
       id-token: write
     runs-on: ubuntu-latest
+    if: ${{ inputs.environment == 'dev' }}
     environment: ${{ inputs.environment}}
     steps:
       - uses: actions/checkout@v4
@@ -58,7 +59,7 @@ jobs:
           fi
 
       - name: Create Release
-        if: ${{ inputs.environment == 'dev' }}
+        # if: ${{ inputs.environment == 'dev' }}
         uses: ncipollo/release-action@v1.18.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -127,7 +128,7 @@ jobs:
             echo "image_tag=v${{ env.project_version }}-rc" >> $GITHUB_ENV
           fi
       - name: Version
-        run: echo Version ${{ env.project_version }}
+        run: echo Version ${{ env.image_tag }}
 
       - name: "Deploys ${{ inputs.container_name }}"
         uses: Azure/k8s-deploy@v4
