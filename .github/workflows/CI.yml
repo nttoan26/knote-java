@@ -1,4 +1,4 @@
-name: CI
+name: Dependency Review
 
 on:
   pull_request:
