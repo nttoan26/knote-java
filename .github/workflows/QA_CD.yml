@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy to QA env
-    uses: ./.github/workflows/java_k8s_CD.yml
+    uses: nttoan26/devops/.github/workflows/java_k8s_CD.yml@v2
     with:
       environment: qa
       namespace: default
