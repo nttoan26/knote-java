@@ -9,7 +9,7 @@ on:
 jobs:
   deploy:
     name: Deploy to DEV env
-    uses: ./.github/workflows/java_k8s_CD.yml
+    uses: nttoan26/devops/.github/workflows/CD_java_k8s.yaml@v2
     with:
       environment: dev
       namespace: default
