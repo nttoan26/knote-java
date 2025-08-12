@@ -1,4 +1,4 @@
-name: java_k8s_CD
+name: CD - Java - Azure k8s
 
 on:
   workflow_call:
