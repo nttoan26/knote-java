@@ -108,7 +108,7 @@ class KNoteController {
 
     @GetMapping("/notes")
     public String index(Model model) {
-        System.out.println("Get all notes");
+        System.out.println("Get all notes.");
         getAllNotes(model);
         return "index";
     }
