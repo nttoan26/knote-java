@@ -25,7 +25,7 @@ jobs:
 
       - name: Build and analyze
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: 7a5f45675bd1eb150f17715a7c0930541c516bfa
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=nttoan26_knote-java -Dsonar.organization=nttoan26
         
      
